@@ -1,4 +1,5 @@
 import logging
+import os
 
 from spyne.decorator import srpc
 from spyne.service import ServiceBase
@@ -22,8 +23,10 @@ if __name__=='__main__':
     logging.basicConfig(level=logging.DEBUG)
     logging.getLogger('spyne.protocol.xml').setLevel(logging.DEBUG)
 
-    logging.info("wsdl is at: http://localhost:7789/?wsdl")
+    port = os.environ['PORT']
+    logging.info('Binding to port : ' + str(port))
+
 
     wsgi_app = wsgi_soap_application([DeliveryFeesService], 'com.marketplace.delivery')
-    server = make_server('127.0.0.1', 7789, wsgi_app)
+    server = make_server('127.0.0.1', port, wsgi_app)
     server.serve_forever()
